@@ -1,0 +1,81 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1">
+<title>ForSale</title>
+<link rel="stylesheet" href="./static/forsale.css"></link>
+</head>
+<body>
+    <div style="display:none"><img src='./static/logo.png'></img></div>
+    <div>
+        <div><label>玩家数:</label><input id="player_count" value="3"></input></div>
+        <div><label>房子数:</label><input id="house_count" value="30"></input></div>
+        <div><label>初始金钱:</label><input id="initial_money" value="18000"></input></div>
+        <div><label>游戏轮数:</label><input id="rounds" value="3"></input></div>
+    </div>
+    <div><label>用户名:</label><input id="myname" value="{{uname}}"></input></div>
+    <div class="btn" onclick = "create_game()">提交</div>
+    <div id="configs"></div>
+</body>
+<script src="./static/zepto.js"></script>
+<script src="./static/base.js"></script>
+<script type="text/javascript" src="./static/socket.io.min.js"></script>
+<script src="./static/forsale.js"></script>
+<script>
+create_game = function(){
+    var myname = $("#myname").val();
+    var data={};
+    var keys = ["myname","rounds","initial_money","house_count","player_count"];
+    for (var i in keys){
+        var val = $("#"+keys[i]).val()
+        if (!val ){
+            alert("请填写必要的信息");
+            return;
+        }
+        data[keys[i]] = val;
+    }
+    data["initial_money"] /= 1000;
+    $.post("/update_name?uname="+myname,"",function(res){
+        if (res.status != "success"){
+            alert(res.status);
+            return;
+        }
+        postJson("/create_game",data, function(res){
+            if (res.status != "success"){
+                alert(res);
+            }else{
+                location.href = "/game?id="+res.id;
+            }
+        })
+    });
+}
+$(document).ready(function(){
+    var configs = {};
+    {% for k,v in configs.items() %}
+    configs[{{k}}] = [{{v[0]}},{{v[1]}},{{v[2]}}]; 
+    {% endfor %}
+    for (var k in configs){
+        var div = $("<div class='btn'></div>").text("默认配置"+k);
+        $("#configs").append(div);
+        var kk = k;
+        (function(k){
+            var c = configs[k]
+            div.click(function(){
+                $("#player_count").val(k);
+                $("#house_count").val(c[0]);
+                $("#rounds").val(c[1]);
+                $("#initial_money").val(c[2]*1000);                
+            })
+        })(kk);/*
+        div.click(function(){
+            (function(p,h,r,m){
+                $("#player_count").val(p);
+                $("#house_count").val(h);
+                $("#rounds").val(r);
+                $("#initial_money").val(m);
+            })(kk,configs[k][0],configs[k][1],configs[k][2]);
+        }.bind();*/
+    }
+});
+</script>
+</html>

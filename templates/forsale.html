@@ -1,0 +1,92 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1">
+<title>ForSale</title>
+<link rel="stylesheet" href="./static/forsale.css"></link>
+</head>
+<body>
+    <div style="display:none"><img src='./static/logo.png'></img></div>
+    <div>玩家列表:</div>
+    <div>{% for u in game.players %}{{u}} {% endfor %}</div>
+    <div>游戏阶段:</div>
+    {% if game.status == "WAIT" %}
+    <div>等待玩家进场</div>    
+    {% elif game.status == "BUY" %}
+    <div>拍卖房产:第{{game.cur_round}}回合</div>
+    <div>房子:{% for h in game.cur_houses %}{{h}}  {% endfor %}</div>
+    <div>当前出价: {{game.cur_price*1000}}, 当前出价玩家:{{game.players[game.cur_player]}}</div>
+    {% elif game.status == "SALE" %}
+    <div>出售房产:第{{game.cur_round}}回合</div>
+    <div>支票:{% for v in game.cur_values %}{{v*1000}}  {% endfor %}</div>
+    {% if status %}
+    {% if game.cur_sales.has_key(myidx) or True%}
+    <div>出售房子:<input id="my_house"></input></div>
+    <div class="btn" onclick = "forsale.submit_house()">出售房产</div>
+    {% else %}
+    <div>等待他人选择房子</div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% if game.status == "BUY" and uname == game.players[game.cur_player] %}
+    <div><label>出价:</label><input id="price"></input></div>
+    <div class="btn" onclick = "forsale.submit_price()">出价</div>
+    <div class="btn" onclick = "forsale.give_up()">放弃</div>
+    {% elif game.status == "FINISHED" %}
+    <div>游戏结束，玩家排序为:{% for p in game.result %}<p>{{p[0]}}:{{p[1]*1000}}</p>{% endfor %}</div>
+    <div class="btn" onclick="location.href = '/create'">新游戏</div>
+    {% endif %} 
+    {% if status %}
+    <div>您的现金数:{{status["money"]*1000}}</div>
+    <div>您的房子:{% for h in status["houses"] %}{{h}} {% endfor %}</div>
+    {% if game.status == "BUY" %}
+    <div>您的当前出价:{{status["price"]*1000}}</div>
+    {% elif game.status == "SALE" or game.status == "FINISHED" %}
+    <div>您的支票:{% for m in status["house_money"] %} {{m*1000}}{% endfor %}</div>
+    {% endif %}
+    {% endif %}
+    {% if game.status in ["SALE","FINISHED"] %}
+    <div>出售情况:</div>
+    {% for sales in game.all_sales %}
+    <div>#######</div>
+    <div>{% for s in sales %}<p>{{s[0]}}售出{{s[1]}}获得{{s[2]*1000}}</p>{% endfor %}</div>
+    {% endfor %}
+    {% endif %}
+    <div><label>用户名:</label><input id="myname" value="{{uname}}"></input></div>
+    {% if game.status == "WAIT" and not uname in game.players %}
+    <div class="btn primary" onclick="join_game()">加入游戏</div>
+    {% endif %}
+    <div class="btn" onclick="location.reload()">刷新</div>
+</body>
+<script src="./static/zepto.js"></script>
+<script src="./static/base.js"></script>
+<script type="text/javascript" src="./static/socket.io.min.js"></script>
+<script src="./static/forsale.js"></script>
+<script>
+var join_game = function(){
+    var myname = $("#myname").val();
+    if (!myname){
+        alert("请输入用户名");
+        return;
+    }
+    $.post("/update_name?uname="+myname,"",function(res){
+        if (res.status != "success"){
+            alert(res.status);
+            return;
+        }
+        $.post("/join_game?id="+{{game.id}},"",function(res){
+            if (res.status != "success"){
+                alert(res.status);
+            }else{
+                location.reload();
+            }
+        });
+    });
+}
+
+$(document).ready(function(){
+    forsale.id = {{game.id}};
+  //  forsale.sock = io.connect("http://" + document.domain + ":" + location.port + "/sock");
+});
+</script>
+</html>

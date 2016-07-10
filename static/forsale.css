@@ -1,0 +1,117 @@
+body > div{
+    margin: 3px;
+}
+div{
+    text-align: center;
+}
+.word{
+    position: relative;
+    float: left;
+    margin: 1%;
+    width: 18%;
+    padding-top: 12%;
+    overflow: hidden;
+    text-align: center;
+    font-size: 10px;
+    color: #eee;
+    background: #555;
+    white-space: nowrap;
+}
+.word p{
+    position: absolute;
+    top: -3px;
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
+.word.open img{
+    display: block;
+}
+.block.r,
+.word.r.show{
+    background: #d20102;
+}
+.block.b,
+.word.b.show{
+    background: #046ea0;
+}
+.block.x,
+.word.x.show{
+    background: #444;
+}
+.block.p,
+.word.p.show{
+    background: #c1a980;
+}
+.word img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    display: none;
+}
+.words{
+    position: relative;
+    background: white;
+    margin: 0 1%;
+    padding: 0;
+}
+.btns,
+.captain{
+    position: relative;
+    text-align: center;
+}
+.captain{
+    border-bottom: 6px solid #d20102;
+    border-top: 6px solid #d20102;
+    padding: 4px;
+    margin: 0% 40% 2%;
+    background: black;
+    border-radius: 5px;
+}
+.captain.b{
+    border-bottom: 4px solid #046ea0;
+    border-top: 4px solid #046ea0;
+}
+.captain .block{
+    float: left;
+    width: 16%;
+    margin: auto;
+    padding-top: 16%;
+    border: 1px black solid;
+    border-radius: 4px;
+}
+.links,.name,.discussion,.sentence{
+    text-align: center;
+}
+.name input,.sentence input{
+    border: 1px solid black;
+    width: 50%;
+}
+.name input{
+    width: 30%;
+}
+.btns{
+    margin: 0% 30%;
+}
+.captain-btns{
+    margin: 0% 30%;
+    text-align: center;
+}
+.btn{
+    border: 1px solid black;
+    padding: 10px;
+}
+.room{
+    font-size: 30px;
+}
+.hidden{
+    display: none;
+}
+p{
+    margin: 2px;
+    padding: 0px;
+}
