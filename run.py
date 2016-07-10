@@ -146,5 +146,5 @@ if __name__ == "__main__":
     app_ = create_app()
     app_.debug = True
     #sockio.run(app)
-    sockio.run(app,port=23332)
+    sockio.run(app,port=23322)
    # app_.run(host='0.0.0.0',port = 23332)

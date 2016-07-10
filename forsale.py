@@ -93,8 +93,8 @@ class ForSale:
             idx,house = h
             sales.append((self.players[idx],house,v))
             self.player_status[idx]["house_money"].append(v)
-        self.next_round()
         self.all_sales.append(sales)
+        self.next_round()
 
     def finish_game(self):
         self.result = []

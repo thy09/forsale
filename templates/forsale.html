@@ -7,6 +7,8 @@
 </head>
 <body>
     <div style="display:none"><img src='./static/logo.png'></img></div>
+    <div>游戏配置</div>
+    <div>{{game.player_count}}名玩家 {{game.house_count}}套房产 {{game.rounds}}轮 初始资金{{game.initial_money*1000}}</div>
     <div>玩家列表:</div>
     <div>{% for u in game.players %}{{u}} {% endfor %}</div>
     <div>游戏阶段:</div>
@@ -53,7 +55,7 @@
     {% endfor %}
     {% endif %}
     <div><label>用户名:</label><input id="myname" value="{{uname}}"></input></div>
-    {% if game.status == "WAIT" and not uname in game.players %}
+    {% if not uname in game.players %}
     <div class="btn primary" onclick="join_game()">加入游戏</div>
     {% endif %}
     <div class="btn" onclick="location.reload()">刷新</div>
